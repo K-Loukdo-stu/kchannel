@@ -1,0 +1,1168 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ChannelCatalogType {
+  id: String!
+  name: String!
+  channelKind: String
+  productType: String
+}
+
+type SearchChannelCatalogsType {
+  channelCatalogs: [ChannelCatalogType!]!
+  channelCatalogsCount: Float
+}
+
+type UserType {
+  id: String!
+  username: String!
+  email: String
+  phone: String
+  bio: String
+  firstName: String
+  lastName: String
+  photo: JSON
+  activated: String
+  role: Float
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type UnpopulatedExtensionSubscriptionType {
+  id: String!
+  extension: String!
+  expiredAt: String!
+  issuedAt: String!
+  deleted: Boolean
+  channel: String!
+}
+
+type UnpopulatedExtensionReviewType {
+  id: String!
+  createdBy: String!
+  feedback: String!
+  rate: Float!
+  extension: String!
+}
+
+type ExtensionType {
+  id: String!
+  name: String!
+  keyname: String!
+  desc: String!
+  review: UnpopulatedExtensionReviewType
+  subscription: UnpopulatedExtensionSubscriptionType
+}
+
+type ChannelType {
+  id: String!
+  name: String!
+  kind: String
+  catalog: ChannelCatalogType
+  bio: String
+  desc: String
+  phone: String
+  email: String
+  website: String
+  productTypes: [String!]!
+  menuBoardExtension: ExtensionType
+  createdBy: UserType
+  profile: JSON
+  cover: JSON
+  acceptingCurrency: String!
+  usdExchangeRateInRiel: String!
+  followshipCount: Float
+  createdAt: Float!
+  updatedAt: Float!
+  address: String
+  latitude: Float
+  longitude: Float
+  public: Boolean
+}
+
+type SearchChannelType {
+  channels: [ChannelType!]!
+  channelTotal: Float!
+  pageTotal: Float!
+}
+
+type SyncChannelType {
+  id: String!
+  name: String!
+  kind: String!
+  catalog: ChannelCatalogType
+  bio: String
+  desc: String
+  phone: String
+  email: String
+  website: String
+  productTypes: [String!]!
+  menuBoardExtension: ExtensionType
+  createdBy: UserType
+  profile: JSON
+  cover: JSON
+  acceptingCurrency: String!
+  usdExchangeRateInRiel: String!
+  createdAt: Float
+  updatedAt: Float
+}
+
+type SyncChannelsType {
+  status: Boolean!
+}
+
+type CardType {
+  id: String!
+  name: String!
+  channel: ChannelType!
+  extensionKeyname: String!
+  autoApproved: Boolean!
+  deleted: Boolean!
+  desc: String
+  memberTotal: Float
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UnpopulatedFollowerRemarkFieldType {
+  id: String!
+  value: String!
+  remark: String!
+  user: String!
+  channel: String!
+}
+
+type ChannelRemarkType {
+  id: String!
+  name: String!
+  desc: String!
+  channel: ChannelType!
+  type: String!
+  validationValues: [String!]!
+  isRequired: Boolean
+  isEnable: Boolean
+  followerRemarkField: UnpopulatedFollowerRemarkFieldType
+}
+
+type CardMembershipType {
+  page: Float!
+  filter: String!
+  status: String!
+  sortBy: Boolean!
+  id: String!
+  expiredAt: String!
+  issuedAt: String!
+  card: CardType
+  user: UserType!
+  channelRemarks: [ChannelRemarkType!]
+  followerRemarkField: UnpopulatedFollowerRemarkFieldType
+  createdAt: DateTime
+  updatedAt: DateTime
+  approved: Boolean
+}
+
+type CardMembershipAttdSessionType {
+  page: Float!
+  filter: String!
+  status: String!
+  sortBy: Boolean!
+  id: String!
+  expiredAt: String!
+  issuedAt: String!
+  card: CardType
+  user: UserType!
+  channelRemarks: [ChannelRemarkType!]
+  followerRemarkField: UnpopulatedFollowerRemarkFieldType
+  createdAt: DateTime
+  updatedAt: DateTime
+  approved: Boolean
+}
+
+type CardMembershipByCardType {
+  total: Float!
+  cardMembership: [CardMembershipType!]!
+}
+
+type ExtensionSubscriptionType {
+  id: String!
+  extension: ExtensionType!
+  expiredAt: String!
+  issuedAt: String!
+  deleted: Boolean
+  isOnMenuBoard: Boolean
+  channel: ChannelType!
+}
+
+type ChannelReviewRateType {
+  percentageRate1Reviews: Float!
+  percentageRate2Reviews: Float!
+  percentageRate3Reviews: Float!
+  percentageRate4Reviews: Float!
+  percentageRate5Reviews: Float!
+  total: Float!
+  avgTotal: Float!
+}
+
+type ChannelReviewType {
+  id: String!
+  createdBy: UserType!
+  feedback: String!
+  rate: Float!
+  extension: ExtensionType!
+  channel: ChannelType!
+  createdAt: Float!
+}
+
+type UnpopulatedOrderLineType {
+  id: String!
+  order: String!
+  product: String!
+  clonedProduct: JSON
+  clonedBasePrice: JSON
+  clonedOptions: [JSON!]
+  price: Float!
+  currency: String!
+  shortDesc: String
+  qty: Float!
+  choiceKey: String!
+}
+
+type OrderType {
+  id: String!
+  user: UserType!
+  channel: ChannelType!
+  inProcessStatus: String!
+  subTotal: Float!
+  discount: Float!
+  delivery: Float!
+  total: Float!
+  acceptingCurrency: String!
+  usdExchangeRateInRiel: Float!
+  hasCurrencyConversion: Boolean
+  orderLines: [UnpopulatedOrderLineType!]
+  lastModifyAt: DateTime
+}
+
+type OrderLineType {
+  id: String!
+  order: OrderType!
+  product: String!
+  clonedProduct: JSON!
+  clonedBasePrice: JSON
+  clonedOptions: [JSON!]
+  price: Float!
+  currency: String!
+  qty: Float!
+  shortDesc: String
+}
+
+type ProductTypeType {
+  id: String!
+  name: String!
+  icon: JSON
+  channel: String
+  channelType: String
+  productTotal: Float
+  photoProductType: JSON
+}
+
+type SearchProductTypeType {
+  productTypes: [ProductTypeType!]!
+  productTypesCount: Float
+}
+
+type PriceType {
+  id: String!
+  name: String!
+  price: Float!
+  discountPrice: Float!
+  currency: String!
+  product: String!
+  isMain: Boolean!
+  hasDiscount: Boolean!
+}
+
+type ProductType {
+  page: Float!
+  id: String!
+  name: String!
+  showOnMenuBoard: Boolean
+  price: PriceType
+  productType: ProductTypeType
+  channel: ChannelType
+  photo: JSON
+  createdAt: Float!
+  updatedAt: Float!
+}
+
+type SearchProductType {
+  products: [ProductType!]!
+  productTotal: Float
+  pageTotal: Float
+}
+
+type SubOptionType {
+  id: String!
+  name: String!
+  price: Float!
+  currency: String!
+  option: String!
+}
+
+type OptionType {
+  id: String!
+  name: String!
+  type: String!
+  product: String!
+  subOptions: [SubOptionType!]
+}
+
+type ChannelFollowshipType {
+  id: String!
+  channel: ChannelType
+  user: UserType
+  joinAt: Float
+  addedBy: UserType
+  deleted: Boolean
+  createdAt: Float
+  updatedAt: Float
+}
+
+type SyncChannelFollowshipType {
+  status: Boolean!
+}
+
+type SyncUserType {
+  id: String!
+  username: String!
+  email: String!
+  phone: String!
+  bio: String!
+  firstName: String!
+  lastName: String!
+  photo: JSON
+  activated: String!
+  role: Float!
+  createdAt: Float
+  updatedAt: Float
+}
+
+type SyncUsersType {
+  status: Boolean!
+}
+
+type Query {
+  channel(id: String!): ChannelType!
+  latestChannel: [ChannelType!]!
+  channelById(id: String!): [ChannelType!]!
+  syncAllChannels(params: SyncAllChannelsInput!): SyncChannelsType!
+  channelInfo(id: String!): ChannelType!
+  searchChannels(param: SearchChannelInput!): SearchChannelType!
+  myChannels: [ChannelType!]!
+  channels(params: ChannelsInput!): [ChannelType!]!
+  channelsByProductType(params: ChannelTypeInput!): [ChannelType!]!
+  channelByUser(user: String!): [ChannelType!]!
+  channelCatalog(id: String!): ChannelCatalogType!
+  channelCatalogs: [ChannelCatalogType!]!
+  channelCatalogsByChannelKind(params: ChannelCatalogsByChannelKindInput!): [ChannelCatalogType!]!
+  searchChannelCatalogs(param: SearchChannelInput!): SearchChannelCatalogsType!
+  channelRemark(params: ChannelRemarkInput!): ChannelRemarkType!
+  channelRemarks: [ChannelRemarkType!]!
+  channelRemarksByChannel(channelId: String!): [ChannelRemarkType!]!
+  chfollowerRemarks(params: ChFollowerRemarkFieldsInput!): [ChannelRemarkType!]!
+  latestChannelFollowship: [ChannelFollowshipType!]!
+  followshipByUser(user: String!): [ChannelFollowshipType!]!
+  syncAllChannelFollowship(params: SyncAllChannelFollowshipInput!): SyncChannelFollowshipType!
+  channelFollowship(id: String!): [ChannelFollowshipType!]!
+  latestUser: [UserType!]!
+  userById(id: String!): [UserType!]!
+  syncAllUsers(params: SyncAllUsersInput!): SyncUsersType!
+  extension(params: ExtensionInput!): ExtensionType!
+  extensions(params: ExtensionsInput!): [ExtensionType!]!
+  channelExtensions(params: ChannelExtensionsInput!): [ExtensionType!]!
+  extensionSubscription(params: ExtensionSubscriptionInput!): ExtensionSubscriptionType!
+  extensionSubscriptions: [ExtensionSubscriptionType!]!
+  attdExtSubscriptions(params: AttdExtSubscriptionByChannelIdsInput!): [ExtensionSubscriptionType!]!
+  extensionSubscriptionByChannel(channelId: String!): [ExtensionSubscriptionType!]!
+  setExtensionOnMenuBoard(params: SetExtensionOnMenuBoardInput!): ExtensionSubscriptionType!
+  channelReviews: [ChannelReviewType!]!
+  extensionReview(extensionId: String!): ChannelReviewType!
+  channelReview(channelId: String!): [ChannelReviewType!]!
+  channelRate(channelId: String!): ChannelReviewRateType!
+  card(params: CardInput!): CardType!
+  cards: [CardType!]!
+  cardsByChannelAndExtension(params: CardsByChannelAndExtensionInput!): [CardType!]!
+  cardMembership(params: DeleteCardMembershipInput!): CardMembershipType!
+  cardMemberships: [CardMembershipType!]!
+  cardMembershipsByCard(params: CardMembershipsByCardInput!): CardMembershipByCardType!
+  membershipsByCardAndAttSession(params: CardMembershipWithAttInput!): [CardMembershipType!]!
+  exportAttdMembershipsByAttdSession(params: ExportCardMembershipWithAttInput!): [CardMembershipType!]!
+  exportAttdMembershipsByChannelAndCard(params: ExportChannelCardMembershipWithAttInput!): [CardMembershipType!]!
+  getAttdByChannelAndCard(params: ExportChannelCardMembershipWithAttInput!): [CardMembershipAttdSessionType!]!
+  product(params: DeleteProductInput!): ProductType!
+  products(page: Float!): [ProductType!]!
+  productsByProductType(params: ProductTypeInput!): [ProductType!]!
+  productsByChannelAndProductType(params: ProductsByChannelAndProductTypeInput!): [ProductType!]!
+  allProductsByChannel(params: AllProductsByChannelInput!): [ProductType!]!
+  searchProductByName(name: String!): [ProductType!]!
+  searchChannelProducts(param: SearchProductInput!): SearchProductType!
+  searchProducts(param: SearchProductsInput!): SearchProductType!
+  showOnMenuBoardProducts(param: ShowOnBoardProductByChannelInput!): [ProductType!]
+  productType(id: String!): ProductTypeType!
+  productTypes: [ProductTypeType!]!
+  systemDefinedProductTypes(params: SysDefinedProcductTypesInput!): [ProductTypeType!]!
+  productTypesByChannel(params: ProcductTypesInput!): [ProductTypeType!]!
+  searchChannelProductTypes(param: SearchProductTypeInput!): SearchProductTypeType!
+  searchProductTypes(param: SearchProductTypesInput!): SearchProductTypeType!
+  productOptionsByProduct(params: AllOptionsByProductInput!): [OptionType!]!
+  subOptionsByOption(params: SubOptionsByOptionInput!): [SubOptionType!]!
+  productPricesByProduct(params: AllpricesByProductInput!): [PriceType!]!
+  orders: [OrderType!]!
+  order(param: OrderInput!): OrderType!
+  orderByChannel(param: OrderInput!): OrderType!
+  myOrders: [OrderType!]!
+  loadOrderCart(params: LoadOrderCartInput!): OrderType!
+  orderSummary(param: OrderSummaryInput!): OrderType!
+  listOrderingSummary(param: OrderingInput!): [OrderType!]!
+  orderLines(param: OrderLinesInput!): [OrderLineType!]!
+  orderLineTotal(param: OrderLineTotalInput!): Float!
+  unavailableOrderLineByOrder(params: OrderLinesInput!): [OrderLineType!]!
+}
+
+input SyncAllChannelsInput {
+  channels: [JSON!]!
+}
+
+input SearchChannelInput {
+  searchText: String!
+  currentPage: Float!
+  limit: Float!
+}
+
+input ChannelsInput {
+  page: Float!
+  limit: Float!
+  catalog: String
+}
+
+input ChannelTypeInput {
+  page: Float!
+  productTypeId: String!
+}
+
+input ChannelCatalogsByChannelKindInput {
+  channelKind: String!
+}
+
+input ChannelRemarkInput {
+  id: String!
+}
+
+input ChFollowerRemarkFieldsInput {
+  follower: String!
+  channel: String!
+}
+
+input SyncAllChannelFollowshipInput {
+  followerships: [JSON!]!
+}
+
+input SyncAllUsersInput {
+  users: [JSON!]!
+}
+
+input ExtensionInput {
+  id: String!
+}
+
+input ExtensionsInput {
+  channel: String!
+}
+
+input ChannelExtensionsInput {
+  channel: String!
+}
+
+input ExtensionSubscriptionInput {
+  id: String!
+}
+
+input AttdExtSubscriptionByChannelIdsInput {
+  pageNumber: Float = 0
+  limit: Float = 30
+}
+
+input SetExtensionOnMenuBoardInput {
+  channel: String!
+  extension: String!
+  isOnMenuBoard: Boolean!
+}
+
+input CardInput {
+  id: String!
+}
+
+input CardsByChannelAndExtensionInput {
+  channelId: String!
+  extensionKeyname: String!
+}
+
+input DeleteCardMembershipInput {
+  id: String!
+}
+
+input CardMembershipsByCardInput {
+  card: String!
+  page: Float!
+  filter: String
+  sortBy: String
+}
+
+input CardMembershipWithAttInput {
+  card: String!
+  attSess: String!
+  page: Float!
+  filter: String
+  status: String
+}
+
+input ExportCardMembershipWithAttInput {
+  card: String!
+  attSess: String!
+}
+
+input ExportChannelCardMembershipWithAttInput {
+  card: String!
+  channel: String!
+}
+
+input DeleteProductInput {
+  id: String!
+}
+
+input ProductTypeInput {
+  page: Float!
+  limit: Float = 15
+  productTypeId: String!
+}
+
+input ProductsByChannelAndProductTypeInput {
+  productType: String = ""
+  channel: String!
+  pageNumber: Float = 1
+  limit: Float = 15
+}
+
+input AllProductsByChannelInput {
+  channel: String!
+}
+
+input SearchProductInput {
+  searchText: String!
+  currentPage: Float!
+  limit: Float = 15
+  channel: String!
+}
+
+input SearchProductsInput {
+  searchText: String!
+  currentPage: Float!
+}
+
+input ShowOnBoardProductByChannelInput {
+  channel: String!
+  limit: Float!
+}
+
+input SysDefinedProcductTypesInput {
+  catalog: String!
+}
+
+input ProcductTypesInput {
+  channel: String
+}
+
+input SearchProductTypeInput {
+  searchText: String!
+  currentPage: Float!
+  createBy: String!
+}
+
+input SearchProductTypesInput {
+  searchText: String!
+  currentPage: Float!
+}
+
+input AllOptionsByProductInput {
+  product: String!
+}
+
+input SubOptionsByOptionInput {
+  option: String!
+}
+
+input AllpricesByProductInput {
+  product: String!
+}
+
+input OrderInput {
+  id: String
+  channel: String
+}
+
+input LoadOrderCartInput {
+  channel: String!
+}
+
+input OrderSummaryInput {
+  orderId: String!
+}
+
+input OrderingInput {
+  inProcessStatus: String
+  channel: String
+}
+
+input OrderLinesInput {
+  orderId: String!
+}
+
+input OrderLineTotalInput {
+  channel: String!
+}
+
+type Mutation {
+  createOrUpdateChannel(params: CreateSyncChannelInput!): SyncChannelType!
+  createChannel(params: CreateChannelInput!): ChannelType!
+  updateChannelCurrencyAndExchangeRate(params: UpdateChannelCurrencyAndExchangeRateInput!): ChannelType!
+  updateChannel(params: UpdateChannelInput!): ChannelType!
+  updateChannelInfo(params: UpdateChannelInfoInput!): ChannelType!
+  updateChannelAddress(params: UpdateChannelAddressInput!): ChannelType!
+  updateChannelProfile(params: UpdateChannelProfileInput!): ChannelType!
+  updateChannelCover(params: UpdateChannelCoverInput!): ChannelType!
+  deleteChannel(params: DeleteChannelInput!): ChannelType!
+  createChannelCatalog(params: CreateChannelCatalogInput!): ChannelCatalogType!
+  deleteChannelCatalog(params: DeleteChannelCatalogInput!): ChannelCatalogType!
+  updateChannelCatalog(params: UpdateChannelCatalogInput!): ChannelCatalogType!
+  createChannelRemark(params: CreateChannelRemarkInput!): ChannelRemarkType!
+  updateChannelRemark(params: UpdateChannelRemarkInput!): ChannelRemarkType!
+  deleteChannelRemark(params: DeleteChannelRemarkInput!): ChannelRemarkType!
+  updateChannelRemarkRequired(params: UpdateChannelRemarkRequiredInput!): ChannelRemarkType!
+  updateChannelRemarkEnable(params: UpdateChannelRemarkEnableInput!): ChannelRemarkType!
+  setChFollowerRemarkFields(params: SetChFollowerRemarkFieldsInput!): [ChannelRemarkType!]!
+  createOrUpdateChannelFollowship(params: CreateUpdateChannelFollowshipInput!): ChannelFollowshipType!
+  createOrUpdateUser(userData: CreateSyncUserInput!): SyncUserType!
+  createExtension(params: CreateExtensionInput!): ExtensionType!
+  deleteExtension(params: DeleteExtensionInput!): ExtensionType!
+  updateExtension(params: UpdateExtensionInput!): ExtensionType!
+  subscribeChannelExtension(params: SubscribeChannelExtensionInput!): ExtensionSubscriptionType!
+  unsubscribeChannelExtension(params: SubscribeChannelExtensionInput!): ExtensionSubscriptionType!
+  deleteExtensionSubscription(params: DeleteExtensionSubscriptionInput!): ExtensionSubscriptionType!
+  removeExtensionSubscription(params: RemoveExtensionSubscriptionInput!): ExtensionSubscriptionType!
+  createChannelReview(params: CreateChannelReviewInput!): ChannelReviewType!
+  createReviewChannel(params: CreateReviewChannelInput!): ChannelReviewType!
+  deleteChannelReview(params: DeleteChannelReviewInput!): ChannelReviewType!
+  updateChannelReview(params: UpdateChannelReviewInput!): ChannelReviewType!
+  createCard(params: CreateCardInput!): CardType!
+  deleteCard(params: DeleteCardInput!): CardType!
+  updateCard(params: UpdateCardInput!): CardType!
+  updateCardStatus(params: UpdateCardStatusInput!): CardType!
+  approveMembership(params: ApproveCardMembershipInput!): CardMembershipType!
+  rejectMembership(params: ApproveCardMembershipInput!): CardMembershipType!
+  createManyCardMemberships(params: CreateCardMembershipInput!): [CardMembershipType!]!
+  updateManyCardMemberships(params: UpdateManyCardMembershipsInput!): [CardMembershipType!]!
+  deleteCardMembership(params: DeleteCardMembershipInput!): CardMembershipType!
+  deleteManyCardMemberships(params: DeleteManyCardMembershipInput!): [CardMembershipType!]!
+  updateCardMembership(params: UpdateCardMembershipInput!): CardMembershipType!
+  createProduct(params: CreateProductInput!): ProductType!
+  updateProduct(params: UpdateProductInput!): ProductType!
+  deleteProduct(params: DeleteProductInput!): ProductType!
+  updateProductShowOnMenuBoard(param: UpdateProductShowOnBoardInput!): ProductType!
+  createProductType(params: CreateProductTypeInput!): ProductTypeType!
+  createManyProductTypes(params: CreateManyProductTypesInput!): [ProductTypeType!]
+  updateProductType(params: UpdateProductTypeInput!): ProductTypeType!
+  deleteProductType(params: DeleteProductTypeInput!): ProductTypeType!
+  createProductOption(params: CreateOptionInput!): OptionType!
+  deleteProductOption(params: DeleteOptionInput!): OptionType!
+  updateProductOption(params: UpdateOptionInput!): OptionType!
+  createSubOption(params: CreateSubOptionInput!): SubOptionType!
+  deleteSubOption(params: DeleteSubOptionInput!): SubOptionType!
+  updateSubOption(params: UpdateSubOptionInput!): SubOptionType!
+  createProductPrice(params: CreatePriceInput!): PriceType!
+  deleteProductPrice(params: DeletePriceInput!): PriceType!
+  updateProductPrice(params: UpdatePriceInput!): PriceType!
+  checkoutCart(params: CheckoutACartInput!): OrderType!
+  updateOrder(params: UpdateOrderInput!): OrderType!
+  deleteOrder(param: OrderInput!): OrderType!
+  updateStatusOrder(params: UpdateStatusInput!): OrderType!
+  createOrderLine(params: CreateOrderLineInput!): OrderLineType!
+  createOrderLineByChannel(params: CreateOrderLineByChannelInput!): OrderLineType!
+  updateOrderLineQuantity(params: UpdateOrderLineQtyInput!): OrderLineType!
+  deleteOrderLine(params: OrderLineInput!): OrderLineType!
+}
+
+input CreateSyncChannelInput {
+  id: String!
+  deleted: Boolean
+  createdAt: Float!
+  updatedAt: Float!
+  createdBy: String
+  name: String!
+  catalog: String
+  kind: String!
+  desc: String
+  bio: String
+  phone: String
+  email: String
+  website: String
+  productTypes: [String!]
+  profile: JSON
+  cover: JSON
+}
+
+input CreateChannelInput {
+  name: String!
+  catalog: String!
+  kind: String!
+  desc: String
+  bio: String
+  phone: String
+  email: String
+  website: String
+  productTypes: [String!]
+  profile: JSON
+  cover: JSON
+  address: String
+  latitude: Float
+  longitude: Float
+}
+
+input UpdateChannelCurrencyAndExchangeRateInput {
+  channelId: String!
+  currencyCode: String!
+  usdExchangeRateInRiel: Float!
+}
+
+input UpdateChannelInput {
+  id: String!
+  name: String!
+  catalog: String!
+  desc: String
+  bio: String
+  phone: String
+  email: String
+  website: String
+  profile: JSON
+  cover: JSON
+}
+
+input UpdateChannelInfoInput {
+  id: String!
+  name: String!
+  catalog: String
+  public: Boolean!
+  desc: String
+  bio: String
+  phone: String
+  email: String
+  website: String
+  usdExchangeRateInRiel: String
+  acceptingCurrency: String
+}
+
+input UpdateChannelAddressInput {
+  id: String!
+  address: String
+  latitude: Float
+  longitude: Float
+}
+
+input UpdateChannelProfileInput {
+  id: String!
+  profile: JSON
+  cover: JSON
+}
+
+input UpdateChannelCoverInput {
+  id: String!
+  cover: JSON!
+}
+
+input DeleteChannelInput {
+  id: String!
+}
+
+input CreateChannelCatalogInput {
+  name: String!
+  channelKind: String!
+}
+
+input DeleteChannelCatalogInput {
+  id: String!
+}
+
+input UpdateChannelCatalogInput {
+  id: String!
+  name: String!
+  productType: String!
+}
+
+input CreateChannelRemarkInput {
+  name: String!
+  desc: String!
+  channel: String!
+  validationValues: [String!]!
+  type: String!
+  isRequired: Boolean!
+  isEnable: Boolean!
+}
+
+input UpdateChannelRemarkInput {
+  id: String!
+  name: String!
+  desc: String!
+  channel: String!
+  type: String!
+  validationValues: [String!]!
+  isRequired: Boolean!
+  isEnable: Boolean!
+}
+
+input DeleteChannelRemarkInput {
+  id: String!
+}
+
+input UpdateChannelRemarkRequiredInput {
+  id: String!
+  isRequired: Boolean!
+}
+
+input UpdateChannelRemarkEnableInput {
+  id: String!
+  isEnable: Boolean!
+}
+
+input SetChFollowerRemarkFieldsInput {
+  follower: String!
+  channel: String!
+  remarkFields: [ChFollowerRemarkFieldInput!]!
+}
+
+input ChFollowerRemarkFieldInput {
+  remark: String!
+  value: String!
+}
+
+input CreateUpdateChannelFollowshipInput {
+  id: String!
+  channel: String
+  user: String
+  joinAt: Float!
+  addedBy: String
+  deleted: Boolean!
+  createdAt: Float!
+  updatedAt: Float!
+}
+
+input CreateSyncUserInput {
+  id: String!
+  createdAt: Float!
+  updatedAt: Float!
+  username: String!
+  firstName: String!
+  lastName: String!
+  bio: String
+  phone: String!
+  email: String!
+  photo: JSON
+  cover: JSON
+  activated: Boolean!
+  role: Float!
+}
+
+input CreateExtensionInput {
+  name: String!
+  keyname: String!
+  desc: String!
+}
+
+input DeleteExtensionInput {
+  id: String!
+}
+
+input UpdateExtensionInput {
+  id: String!
+  name: String!
+  keyname: String!
+  desc: String!
+}
+
+input SubscribeChannelExtensionInput {
+  extension: String!
+  channel: String!
+}
+
+input DeleteExtensionSubscriptionInput {
+  id: String!
+}
+
+input RemoveExtensionSubscriptionInput {
+  id: String!
+  deleted: Boolean!
+}
+
+input CreateChannelReviewInput {
+  feedback: String!
+  rate: Float!
+  extension: String!
+}
+
+input CreateReviewChannelInput {
+  feedback: String
+  rate: Float!
+  channel: String!
+}
+
+input DeleteChannelReviewInput {
+  id: String!
+}
+
+input UpdateChannelReviewInput {
+  id: String!
+  feedback: String!
+  rate: Float!
+}
+
+input CreateCardInput {
+  name: String!
+  channel: String!
+  extensionKeyname: String!
+  autoApproved: Boolean!
+  deleted: Boolean!
+  desc: String
+}
+
+input DeleteCardInput {
+  id: String!
+}
+
+input UpdateCardInput {
+  id: String!
+  name: String!
+  channel: String!
+  extensionKeyname: String!
+  autoApproved: Boolean!
+  deleted: Boolean!
+  desc: String
+}
+
+input UpdateCardStatusInput {
+  id: String!
+  deleted: Boolean!
+}
+
+input ApproveCardMembershipInput {
+  card: String!
+  user: String!
+}
+
+input CreateCardMembershipInput {
+  expiredAt: String!
+  issuedAt: String!
+  card: String
+  users: [String!]!
+  approved: Boolean!
+}
+
+input UpdateManyCardMembershipsInput {
+  card: String!
+  users: [String!]!
+}
+
+input DeleteManyCardMembershipInput {
+  card: String!
+  users: [String!]!
+}
+
+input UpdateCardMembershipInput {
+  id: String!
+  expiredAt: String!
+  issuedAt: String!
+  card: String
+  user: String
+  approved: Boolean
+}
+
+input CreateProductInput {
+  id: String
+  name: String!
+  price: Float
+  productType: String!
+  channel: String!
+  photo: JSON
+  discountPrice: Float!
+  hasDiscount: Boolean!
+  currency: String!
+}
+
+input UpdateProductInput {
+  id: String!
+  name: String!
+  productType: String!
+  photo: JSON
+}
+
+input UpdateProductShowOnBoardInput {
+  product: String!
+  showOnMenuBoard: Boolean!
+}
+
+input CreateProductTypeInput {
+  name: String!
+  channel: String
+  catalog: String
+  icon: JSON
+}
+
+input CreateManyProductTypesInput {
+  channel: String!
+  names: [String!]!
+}
+
+input UpdateProductTypeInput {
+  id: String!
+  name: String!
+  catalog: String
+  icon: JSON
+}
+
+input DeleteProductTypeInput {
+  id: String!
+}
+
+input CreateOptionInput {
+  name: String!
+  type: String!
+  product: String!
+}
+
+input DeleteOptionInput {
+  id: String!
+}
+
+input UpdateOptionInput {
+  id: String!
+  name: String!
+  type: String!
+}
+
+input CreateSubOptionInput {
+  name: String!
+  price: Float!
+  option: String!
+  currency: String!
+  product: String!
+}
+
+input DeleteSubOptionInput {
+  id: String!
+}
+
+input UpdateSubOptionInput {
+  id: String!
+  name: String!
+  price: Float!
+  currency: String!
+}
+
+input CreatePriceInput {
+  name: String!
+  price: Float!
+  discountPrice: Float!
+  hasDiscount: Boolean!
+  isMain: Boolean = false
+  currency: String!
+  product: String!
+}
+
+input DeletePriceInput {
+  id: String!
+}
+
+input UpdatePriceInput {
+  id: String!
+  name: String!
+  price: Float!
+  discountPrice: Float!
+  hasDiscount: Boolean!
+  currency: String!
+}
+
+input CheckoutACartInput {
+  orderId: String!
+  subTotal: Float!
+  discount: Float!
+  delivery: Float!
+  total: Float!
+  acceptingCurrency: String!
+  usdExchangeRateInRiel: Float!
+  hasCurrencyConversion: Boolean!
+}
+
+input UpdateOrderInput {
+  id: String!
+  location: String!
+  contact: String!
+  stateOrdering: String!
+}
+
+input UpdateStatusInput {
+  id: String!
+  status: String!
+}
+
+input CreateOrderLineInput {
+  order: String!
+  product: String!
+  clonedProduct: JSON!
+  clonedBasePrice: JSON!
+  clonedOptions: [JSON!]!
+  price: Float!
+  currency: String!
+  qty: Float!
+}
+
+input CreateOrderLineByChannelInput {
+  channel: String!
+  orderLine: OrderLineByChannelInput!
+}
+
+input OrderLineByChannelInput {
+  product: String!
+  clonedProduct: JSON!
+  clonedBasePrice: JSON!
+  clonedOptions: [JSON!]
+  price: Float!
+  currency: String!
+  qty: Float!
+}
+
+input UpdateOrderLineQtyInput {
+  id: String!
+  quantity: Float!
+}
+
+input OrderLineInput {
+  id: String!
+}
