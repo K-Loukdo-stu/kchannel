@@ -328,6 +328,19 @@ type OptionType {
   subOptions: [SubOptionType!]
 }
 
+type KLoukdoCategoryType {
+  id: String!
+  name: String!
+  icon: String
+}
+
+type KLoukdoSubCategoryType {
+  id: String!
+  name: String!
+  category: String!
+  icon: String
+}
+
 type ChannelFollowshipType {
   id: String!
   channel: ChannelType
@@ -438,6 +451,7 @@ type Query {
   orderLines(param: OrderLinesInput!): [OrderLineType!]!
   orderLineTotal(param: OrderLineTotalInput!): Float!
   unavailableOrderLineByOrder(params: OrderLinesInput!): [OrderLineType!]!
+  getKLoukdoCategories: [KLoukdoCategoryType!]!
 }
 
 input SyncAllChannelsInput {
@@ -710,6 +724,8 @@ type Mutation {
   createOrderLineByChannel(params: CreateOrderLineByChannelInput!): OrderLineType!
   updateOrderLineQuantity(params: UpdateOrderLineQtyInput!): OrderLineType!
   deleteOrderLine(params: OrderLineInput!): OrderLineType!
+  createKLoukdoCategory(params: CreateKLoukdoCategoryInput!): KLoukdoCategoryType!
+  createKLoukdoSubCategory(params: CreateKLoukdoSubCategoryInput!): KLoukdoSubCategoryType!
 }
 
 input CreateSyncChannelInput {
@@ -1165,4 +1181,15 @@ input UpdateOrderLineQtyInput {
 
 input OrderLineInput {
   id: String!
+}
+
+input CreateKLoukdoCategoryInput {
+  name: String!
+  icon: String
+}
+
+input CreateKLoukdoSubCategoryInput {
+  name: String!
+  category: String!
+  icon: String
 }

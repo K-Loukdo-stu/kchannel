@@ -20,6 +20,8 @@ import { ProductResolver } from './product/product.resolver';
 import { ProductService } from './product/product.service';
 import { SubOptionService } from './product/sub-option.service';
 import { HttpModule } from '@nestjs/axios';
+import { KLoukdoService } from './k-loukdo/k-loukdo.service';
+import { KLoukdoResolver } from './k-loukdo/k-loukdo.resolver';
 
 
 const combinedServices = [
@@ -43,6 +45,9 @@ const combinedServices = [
   CardMembershipService,
   CardService,
   AttSessionMembershipService,
+
+  //
+  KLoukdoService
 ];
 
 @Module({
@@ -57,6 +62,7 @@ const combinedServices = [
     CardResolver,
     ProductResolver,
     OrderResolver,
+    KLoukdoResolver,
     ...combinedServices
   ],
   controllers: [
