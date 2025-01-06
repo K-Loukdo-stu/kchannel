@@ -2,13 +2,8 @@ import { Field, InputType } from "@nestjs/graphql";
 import { IsNotEmpty } from "class-validator";
 
 @InputType()
-export default class CreateKLoukdoCategoryInput {
-
-
+export default class DeleteKLoukdoCategoryInput {
     @Field()
     @IsNotEmpty()
-    name: string;
-
-    @Field({nullable: true})
-    icon: string;
+    id: string;
 }

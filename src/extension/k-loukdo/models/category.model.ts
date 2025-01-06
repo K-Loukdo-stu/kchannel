@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 interface KLoukdoCategoryAttrs {
     id?: string;
     name: string;
-    icon?: string;
+    icon?: object;
 }
 
 interface KLoukdoCategoryModel extends mongoose.Model<KLoukdoCategoryDoc> {
@@ -13,7 +13,7 @@ interface KLoukdoCategoryModel extends mongoose.Model<KLoukdoCategoryDoc> {
 interface KLoukdoCategoryDoc extends mongoose.Document {
     id?: string;
     name: string;
-    icon?: string;
+    icon?: object;
 }
 
 const kLoukdoCategorySchema = new mongoose.Schema({
@@ -22,7 +22,7 @@ const kLoukdoCategorySchema = new mongoose.Schema({
         required: true,
     },
     icon: {
-        type: String,
+        type: Object,
     }
 },
 {

@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import JSON from "graphql-type-json"
 
 @ObjectType()
 export class KLoukdoCategoryType {
@@ -8,6 +9,6 @@ export class KLoukdoCategoryType {
     @Field()
     name: string;
 
-    @Field({nullable: true})
-    icon: string;
+    @Field(() => JSON, {nullable: true})
+    icon?: any;
 }
