@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaTypes } from "mongoose";
 
 interface KLoukdoSubCategoryAttrs {
     id?: string;
     name: string;
     category: string;
-    icon: string;
+    icon?: string;
 }
 
 interface KLoukdoSubCategoryModel extends mongoose.Model<KLoukdoSubCategoryDoc> {
@@ -24,13 +24,23 @@ const kLoukdoSubCategorySchema = new mongoose.Schema({
         required: true,
     },
     category: {
-        type: String,
-        required: true
+        type: SchemaTypes.ObjectId,
+        ref: 'KLoukdoCategory'
     },
     icon: {
         type: String,
     }
-})
+},
+    {
+        timestamps: true,
+        toJSON: {
+            transform(doc, ret) {
+                ret.id = ret._id;
+                delete ret._id;
+                delete ret.__v;
+            }
+        }
+    })
 
 kLoukdoSubCategorySchema.statics.build = (attrs: KLoukdoSubCategoryAttrs) => {
     const _id = attrs.id
