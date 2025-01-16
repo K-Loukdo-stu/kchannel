@@ -4,12 +4,11 @@ import { SchemaTypes } from 'mongoose'
 interface KLoukdoProductAttrs {
     id?: string;
     name: string;
-    icon: Object;
-    description: string;
-    category: number;
-    subcategory: number;
-    price: number;
-    condition: string;
+    category: string;
+    subCategory: string;
+    user: string;
+    photos?: object[];
+    showOnMenuBoard?: boolean;
 }
 
 interface KLoukdoProductModel extends mongoose.Model<KLoukdoProductDoc> {
@@ -20,12 +19,11 @@ interface KLoukdoProductModel extends mongoose.Model<KLoukdoProductDoc> {
 interface KLoukdoProductDoc extends mongoose.Document {
     id?: string;
     name: string;
-    icon: Object;
-    description: string;
-    category: number;
-    subcategory: number;
-    price: number;
-    condition: string;
+    category: string;
+    subCategory: string;
+    user: string;
+    photos?: object[];
+    showOnMenuBoard?: boolean;
 }
 
 const kLoukdoProductShema = new mongoose.Schema({
@@ -33,32 +31,28 @@ const kLoukdoProductShema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    icon: {
-        type: Object,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: true,
-    },
     category: {
-        type: Number,
-        ref: "Category",
+        type: SchemaTypes.ObjectId,
+        ref: 'KLoukdoCategory',
+        required: true,
+    },
+    subCategory: {
+        type: SchemaTypes.ObjectId,
+        ref: 'KLoukdoSubCategory',
+        required: true,
+    },
+    user: {
+        type: SchemaTypes.ObjectId,
+        ref: 'User',
         required: true
     },
-    subcategory: {
-        type: Number,
-        ref: "SubCategory",
-        required: true,
+    photos: {
+        type: [Object],
     },
-    price: {
-        type: Number,
-        required: true,
+    showOnMenuBoard: {
+        type: Boolean,
+        default: false,
     },
-    condition: {
-        type: String,
-        required: true,
-    }
 },
     {
         timestamps: true,
