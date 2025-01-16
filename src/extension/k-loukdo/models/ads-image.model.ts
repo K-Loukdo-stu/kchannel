@@ -1,54 +1,60 @@
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 
-// interface AdvertisementImageAttrs {
-//     id?: number;
-//     advertisement: number;
-//     image: Object;
-// }
+interface KLoukdoAdvertisementImageAttrs {
+    id?: string;
+    name: string;
+    image: object;
+    endDate: Date;
+}
 
-// interface AdvertisementImageModel extends mongoose.Model<AdvertisementImageDoc> {
-//     build(attrs: AdvertisementImageAttrs): AdvertisementImageDoc;
-// }
+interface KLoukdoAdvertisementImageModel extends mongoose.Model<KLoukdoAdvertisementImageDoc> {
+    build(attrs: KLoukdoAdvertisementImageAttrs): KLoukdoAdvertisementImageDoc;
+}
 
-// interface AdvertisementImageDoc extends mongoose.Document {
-//     id?: number;
-//     advertisement: number;
-//     image: Object;
-// }
+interface KLoukdoAdvertisementImageDoc extends mongoose.Document {
+    id?: string;
+    name: string;
+    image?: object;
+    endDate: Date;
 
-// const advertisementImageSchema = new mongoose.Schema({
-//     advertisement: {
-//         type: String,
-//         required: true,
-//     },
-//     image: {
-//         type: Object,
-//         required: true
-//     }
-// },
-// {
-//     timestamps: true,
-//     toJSON: {
-//         transform(doc, ret) {
-//             ret.id = ret._id;
-//             delete ret._id;
-//             delete ret.__v;
-//         }
-//     }
-// }
-// )
+}
 
-// advertisementImageSchema.statics.build = (attrs: AdvertisementImageAttrs) => {
-//     const _id = attrs.id
-//     delete attrs.id
-//     return new AdvertisementImage({
-//         _id,
-//         ...attrs
-//     })
-// }
+const kLoukdoAdvertisementImageSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    image: {
+        type: Object
+    },
+    endDate: {
+        type: Date,
+        required: true
+    }
+},
+{
+    timestamps: true,
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.__v;
+        }
+    }
+}
+)
 
-// const AdvertisementImage = mongoose.model<AdvertisementImageDoc, AdvertisementImageModel>(
-//     'AdvertisementImage', advertisementImageSchema
-// );
+kLoukdoAdvertisementImageSchema.statics.build = (attrs: KLoukdoAdvertisementImageAttrs) => {
+    const _id = attrs.id
+    delete attrs.id
+    return new KLoukdoAdvertisementImage({
+        _id,
+        ...attrs
+    })
+}
 
-// export {AdvertisementImage, AdvertisementImageAttrs, AdvertisementImageDoc}
+const KLoukdoAdvertisementImage = mongoose.model<KLoukdoAdvertisementImageDoc, KLoukdoAdvertisementImageModel>(
+    'KLoukdoAdvertisementImage', kLoukdoAdvertisementImageSchema
+);
+
+export {KLoukdoAdvertisementImage, KLoukdoAdvertisementImageAttrs, KLoukdoAdvertisementImageDoc}
