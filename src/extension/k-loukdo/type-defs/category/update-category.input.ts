@@ -11,6 +11,6 @@ export default class UpdateKLoukdoCategoryInput {
     @Field({nullable: true})
     name: string;
 
-    @Field(() => JSON, {nullable: true})
-    icon: any;
+    @Field({nullable: true})
+    icon: string;
 }

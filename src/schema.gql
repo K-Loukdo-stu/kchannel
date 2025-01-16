@@ -337,23 +337,15 @@ type KLoukdoCategoryType {
 type KLoukdoSubCategoryType {
   id: String!
   name: String!
-  category: String!
+  category: KLoukdoCategoryType!
   icon: String
 }
 
-type ChannelFollowshipType {
+type KLoukdoAdvertisementImageType {
   id: String!
-  channel: ChannelType
-  user: UserType
-  joinAt: Float
-  addedBy: UserType
-  deleted: Boolean
-  createdAt: Float
-  updatedAt: Float
-}
-
-type SyncChannelFollowshipType {
-  status: Boolean!
+  name: String!
+  image: JSON
+  endDate: DateTime!
 }
 
 type SyncUserType {
@@ -372,6 +364,41 @@ type SyncUserType {
 }
 
 type SyncUsersType {
+  status: Boolean!
+}
+
+type KLoukdoProductType {
+  page: Float!
+  id: String!
+  name: String!
+  showOnMenuBoard: Boolean
+  price: PriceType
+  category: KLoukdoCategoryType!
+  subCategory: KLoukdoSubCategoryType!
+  user: UserType!
+  photos: [JSON!]
+  createdAt: Float!
+  updatedAt: Float!
+}
+
+type KLoukdoPromotionType {
+  id: String!
+  product: KLoukdoProductType!
+  endDate: DateTime!
+}
+
+type ChannelFollowshipType {
+  id: String!
+  channel: ChannelType
+  user: UserType
+  joinAt: Float
+  addedBy: UserType
+  deleted: Boolean
+  createdAt: Float
+  updatedAt: Float
+}
+
+type SyncChannelFollowshipType {
   status: Boolean!
 }
 
@@ -452,6 +479,20 @@ type Query {
   orderLineTotal(param: OrderLineTotalInput!): Float!
   unavailableOrderLineByOrder(params: OrderLinesInput!): [OrderLineType!]!
   getKLoukdoCategories: [KLoukdoCategoryType!]!
+  getKLoukdoSubCategoriesByPage(page: Float!): [KLoukdoSubCategoryType!]!
+  getKLoukdoSubCategories: [KLoukdoSubCategoryType!]!
+  getKLoukdoSubCategoriesByCategory(params: GetKLoukdoSubCategoryByCategoryInput!): [KLoukdoSubCategoryType!]!
+  getKLoukdoAdvertisementImage: [KLoukdoAdvertisementImageType!]!
+  getAllKLoukdoAdvertisementImage(page: Float!): [KLoukdoAdvertisementImageType!]!
+  getKLoukdoPromotionByCategory(params: GetKLoukdoPromotionByCategoryInput!): [KLoukdoPromotionType!]!
+  getKLoukdoPromotionBySubCategory(params: GetKLoukdoPromotionBySubCategoryInput!): [KLoukdoPromotionType!]!
+  getKLoukdoPromotionRandom: [KLoukdoPromotionType!]!
+  getAllKLoukdoPromotions(page: Float!): [KLoukdoPromotionType!]!
+  getKLoukdoProduct(params: DeleteKLoukdoProductInput!): KLoukdoProductType!
+  getAllKLoukdoProducts(page: Float!): [KLoukdoProductType!]!
+  searchKLoukdoProductByName(name: String!): [KLoukdoProductType!]!
+  findKLoukdoProductByCategory(id: String!): [KLoukdoProductType!]!
+  findKLoukdoProductBySubCategory(id: String!): [KLoukdoProductType!]!
 }
 
 input SyncAllChannelsInput {
@@ -656,6 +697,22 @@ input OrderLineTotalInput {
   channel: String!
 }
 
+input GetKLoukdoSubCategoryByCategoryInput {
+  category: String!
+}
+
+input GetKLoukdoPromotionByCategoryInput {
+  category: String!
+}
+
+input GetKLoukdoPromotionBySubCategoryInput {
+  subCategory: String!
+}
+
+input DeleteKLoukdoProductInput {
+  id: String!
+}
+
 type Mutation {
   createOrUpdateChannel(params: CreateSyncChannelInput!): SyncChannelType!
   createChannel(params: CreateChannelInput!): ChannelType!
@@ -725,7 +782,20 @@ type Mutation {
   updateOrderLineQuantity(params: UpdateOrderLineQtyInput!): OrderLineType!
   deleteOrderLine(params: OrderLineInput!): OrderLineType!
   createKLoukdoCategory(params: CreateKLoukdoCategoryInput!): KLoukdoCategoryType!
+  updateKLoukdoCategory(params: UpdateKLoukdoCategoryInput!): KLoukdoCategoryType!
+  deleteKLoukdoCategory(params: DeleteKLoukdoCategoryInput!): KLoukdoCategoryType!
   createKLoukdoSubCategory(params: CreateKLoukdoSubCategoryInput!): KLoukdoSubCategoryType!
+  updateKLoukdoSubCategory(params: UpdateKLoukdoSubCategoryInput!): KLoukdoSubCategoryType!
+  deleteKLoukdoSubCategory(params: DeleteKLoukdoSubCategoryInput!): KLoukdoCategoryType!
+  createKLoukdoAdvertisementImage(params: CreateKLoukdoAdvertisementImageInput!): KLoukdoAdvertisementImageType!
+  updateKLoukdoAdvertisementImage(params: UpdateKLoukdoAdvertisementImageInput!): KLoukdoAdvertisementImageType!
+  deleteKLoukdoAdvertisementImage(params: DeleteKLoukdoAdvertisementImageInput!): KLoukdoAdvertisementImageType!
+  createKLoukdoPromotion(params: CreateKLoukdoPromotionInput!): KLoukdoPromotionType!
+  updateKLoukdoPromotion(params: UpdateKLoukdoPromotionInput!): KLoukdoPromotionType!
+  deleteKLoukdoPromotion(params: DeleteKLoukdoPromotionInput!): KLoukdoPromotionType!
+  createKLoukdoProduct(params: CreateKLoukdoProductInput!): KLoukdoProductType!
+  updateKLoukdoProduct(params: UpdateKLoukdoProductInput!): KLoukdoProductType!
+  deleteKLoukdoProduct(params: DeleteKLoukdoProductInput!): KLoukdoProductType!
 }
 
 input CreateSyncChannelInput {
@@ -1188,8 +1258,82 @@ input CreateKLoukdoCategoryInput {
   icon: String
 }
 
+input UpdateKLoukdoCategoryInput {
+  id: String!
+  name: String
+  icon: String
+}
+
+input DeleteKLoukdoCategoryInput {
+  id: String!
+}
+
 input CreateKLoukdoSubCategoryInput {
   name: String!
   category: String!
   icon: String
+}
+
+input UpdateKLoukdoSubCategoryInput {
+  id: String!
+  name: String
+  icon: String
+  category: String
+}
+
+input DeleteKLoukdoSubCategoryInput {
+  id: String!
+}
+
+input CreateKLoukdoAdvertisementImageInput {
+  name: String!
+  image: JSON
+  endDate: DateTime!
+}
+
+input UpdateKLoukdoAdvertisementImageInput {
+  id: String!
+  name: String
+  image: JSON
+  endDate: DateTime
+}
+
+input DeleteKLoukdoAdvertisementImageInput {
+  id: String!
+}
+
+input CreateKLoukdoPromotionInput {
+  product: String!
+  endDate: DateTime!
+}
+
+input UpdateKLoukdoPromotionInput {
+  id: String!
+  product: String
+  endDate: DateTime
+}
+
+input DeleteKLoukdoPromotionInput {
+  id: String!
+}
+
+input CreateKLoukdoProductInput {
+  id: String
+  name: String!
+  price: Float
+  category: String!
+  subCategory: String!
+  photos: [JSON!]
+  discountPrice: Float!
+  hasDiscount: Boolean!
+  currency: String!
+}
+
+input UpdateKLoukdoProductInput {
+  id: String!
+  name: String
+  price: Float
+  category: String
+  subCategory: String
+  photos: [JSON!]
 }

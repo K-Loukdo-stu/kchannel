@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaTypes } from "mongoose";
 
 interface KLoukdoSuggestionAttrs {
     id?: string;
@@ -16,8 +16,8 @@ interface KLoukdoSuggestionDoc extends mongoose.Document {
 
 const kLoukdoSuggestionSchema = new mongoose.Schema({
     product: {
-        type: String,
-        required: true,
+        type: SchemaTypes.ObjectId,
+        ref: 'Product',
     },
 })
 
