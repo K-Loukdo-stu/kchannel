@@ -79,8 +79,8 @@ export class KLoukdoService {
         return subCategory;
     }
 
-    async getAllSubCategoryByPage({ page = 0, limit = 15}) {
-        const subCategory = await KLoukdoSubCategory.find().populate(['category']).skip(page * limit).limit(limit);
+    async getAllSubCategoryByPage({ page = 0, limit = 12}) {
+        const subCategory = await KLoukdoSubCategory.find().populate(['category']).skip(page * limit).limit(limit).sort('category');
         return subCategory;
     }
     async getAllSubCategories() {
@@ -456,6 +456,35 @@ export class KLoukdoService {
             },
             { $unwind: "$product.subCategory" },
             {
+                $lookup: {
+                    from: "prices",
+                    let: { product_id: '$product._id' },
+                    as: "prices",
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$product", "$$product_id"],
+                                }
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 1,
+                                id: "$_id",
+                                name: 1,
+                                price: 1,
+                                currency: 1,
+                                discountPrice: 1,
+                                hasDiscount: 1,
+                                product: 1,
+                                isMain: 1,
+                            }
+                        }
+                    ]
+                },
+            },
+            {
                 $project: {
                     _id: 0,
                     id: "$_id",
@@ -470,6 +499,8 @@ export class KLoukdoService {
                             id: "$product.subCategory._id",
                             name: "$product.subCategory.name"
                         },
+                        price: { $arrayElemAt: ["$prices", 0] },
+                        photos: "$product.photos"
                     },
                     endDate: 1,
                 }
