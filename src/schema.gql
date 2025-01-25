@@ -377,8 +377,8 @@ type KLoukdoProductType {
   subCategory: KLoukdoSubCategoryType!
   user: UserType!
   photos: [JSON!]
-  createdAt: Float!
-  updatedAt: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type KLoukdoPromotionType {
@@ -489,10 +489,10 @@ type Query {
   getKLoukdoPromotionRandom: [KLoukdoPromotionType!]!
   getAllKLoukdoPromotions(page: Float!): [KLoukdoPromotionType!]!
   getKLoukdoProduct(params: DeleteKLoukdoProductInput!): KLoukdoProductType!
-  getAllKLoukdoProducts(page: Float!): [KLoukdoProductType!]!
+  getAllKLoukdoProducts(params: GetAllKLoukdoProductInput!): [KLoukdoProductType!]!
   searchKLoukdoProductByName(name: String!): [KLoukdoProductType!]!
-  findKLoukdoProductByCategory(id: String!): [KLoukdoProductType!]!
-  findKLoukdoProductBySubCategory(id: String!): [KLoukdoProductType!]!
+  findKLoukdoProductByCategory(params: GetKLoukdoProductByCategoryInput!): [KLoukdoProductType!]!
+  findKLoukdoProductBySubCategory(params: GetKLoukdoProductBySubCategoryInput!): [KLoukdoProductType!]!
 }
 
 input SyncAllChannelsInput {
@@ -711,6 +711,21 @@ input GetKLoukdoPromotionBySubCategoryInput {
 
 input DeleteKLoukdoProductInput {
   id: String!
+}
+
+input GetAllKLoukdoProductInput {
+  page: Float!
+  limit: Float = 15
+}
+
+input GetKLoukdoProductByCategoryInput {
+  category: String!
+  limit: Float = 15
+}
+
+input GetKLoukdoProductBySubCategoryInput {
+  subCategory: String!
+  limit: Float = 15
 }
 
 type Mutation {

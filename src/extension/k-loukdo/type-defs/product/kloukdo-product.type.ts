@@ -38,8 +38,8 @@ export class KLoukdoProductType {
     photos?: any[];
 
     @Field()
-    createdAt: number;
+    createdAt: Date;
 
     @Field()
-    updatedAt: number;
+    updatedAt: Date;
 }

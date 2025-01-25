@@ -792,6 +792,7 @@ export class KLoukdoService {
                         },
                         user: 1,
                         photos: 1,
+                        createdAt: 1
                     }
                 },
                 {
@@ -811,13 +812,13 @@ export class KLoukdoService {
         return product as [KLoukdoProductDoc];
     }
 
-    async findKLoukdoProductByCategory(id: string) {
-        const product = await KLoukdoProduct.find({ "category": id }).limit(30).populate(['category', 'subCategory', 'user']);
+    async findKLoukdoProductByCategory(id: string, limit = 15) {
+        const product = await KLoukdoProduct.find({ "category": id }).limit(limit).populate(['category', 'subCategory', 'user']);
         return product as [KLoukdoProductDoc];
     }
 
-    async findKLoukdoProductBySubCategory(id: string) {
-        const product = await KLoukdoProduct.find({ "subCategory": id }).limit(30).populate(['category', 'subCategory', 'user']);
+    async findKLoukdoProductBySubCategory(id: string, limit = 15) {
+        const product = await KLoukdoProduct.find({ "subCategory": id }).limit(limit).populate(['category', 'subCategory', 'user']);
         return product as [KLoukdoProductDoc];
     }
     

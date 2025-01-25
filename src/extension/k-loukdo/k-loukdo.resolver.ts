@@ -52,6 +52,9 @@ import { UpdateKLoukdoProductSchema } from './schemas/product/update-kloukdo-pro
 import UpdateKLoukdoProductInput from './type-defs/product/update-kloukdo-product.input';
 import { DeleteKLoukdoProductSchema } from './schemas/product/delete-kloukdo-product.schema';
 import DeleteKLoukdoProductInput from './type-defs/product/delete-kloukdo-product.input';
+import GetAllKLoukdoProductInput from './type-defs/product/get-all-kloukdo-product.input';
+import GetKLoukdoProductByCategoryInput from './type-defs/product/get-kloukdo-product-by-category.input';
+import GetKLoukdoProductBySubCategoryInput from './type-defs/product/get-kloukdo-product-by-sub-category.input';
 
 @Resolver()
 export class KLoukdoResolver {
@@ -295,8 +298,9 @@ export class KLoukdoResolver {
     @Directive('@auth')
     @Directive('@currentUser')
     @Query(() => [KLoukdoProductType])
-    async getAllKLoukdoProducts(@Args('page', { type: () => Number }) page: number) {
-        return await this.service.getAllKLoukdoProduct({ page });
+    async getAllKLoukdoProducts(@Args('params') params: GetAllKLoukdoProductInput) {
+        const { page, limit } = params;
+        return await this.service.getAllKLoukdoProduct({ page, limit });
     }
 
     @Directive('@auth')
@@ -309,15 +313,17 @@ export class KLoukdoResolver {
     @Directive('@auth')
     @Directive('@currentUser')
     @Query(() => [KLoukdoProductType])
-    findKLoukdoProductByCategory(@Args('id', { type: () => String }) id: string) {
-        return this.service.findKLoukdoProductByCategory(id);
+    findKLoukdoProductByCategory(@Args('params') params: GetKLoukdoProductByCategoryInput) {
+        const { category, limit } = params;
+        return this.service.findKLoukdoProductByCategory(category, limit);
     }
 
     @Directive('@auth')
     @Directive('@currentUser')
     @Query(() => [KLoukdoProductType])
-    findKLoukdoProductBySubCategory(@Args('id', { type: () => String }) id: string) {
-        return this.service.findKLoukdoProductBySubCategory(id);
+    findKLoukdoProductBySubCategory(@Args('params') params: GetKLoukdoProductBySubCategoryInput) {
+        const { subCategory, limit } = params;
+        return this.service.findKLoukdoProductBySubCategory(subCategory, limit);
     }
 
 }
