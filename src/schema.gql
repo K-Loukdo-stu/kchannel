@@ -387,6 +387,24 @@ type KLoukdoPromotionType {
   endDate: DateTime!
 }
 
+type GetKLoukdoSubCategoryByPageType {
+  subCategory: [KLoukdoSubCategoryType!]!
+  total: Float
+  page: Float
+}
+
+type GetKLoukdoCategoryByPageType {
+  category: [KLoukdoCategoryType!]!
+  total: Float
+  page: Float
+}
+
+type GetKLoukdoProductByPageType {
+  product: [KLoukdoProductType!]!
+  total: Float
+  page: Float
+}
+
 type ChannelFollowshipType {
   id: String!
   channel: ChannelType
@@ -479,7 +497,8 @@ type Query {
   orderLineTotal(param: OrderLineTotalInput!): Float!
   unavailableOrderLineByOrder(params: OrderLinesInput!): [OrderLineType!]!
   getKLoukdoCategories: [KLoukdoCategoryType!]!
-  getKLoukdoSubCategoriesByPage(page: Float!): [KLoukdoSubCategoryType!]!
+  getKLoukdoCategoriesByPage(page: Float!): GetKLoukdoCategoryByPageType!
+  getKLoukdoSubCategoriesByPage(page: Float!): GetKLoukdoSubCategoryByPageType!
   getKLoukdoSubCategories: [KLoukdoSubCategoryType!]!
   getKLoukdoSubCategoriesByCategory(params: GetKLoukdoSubCategoryByCategoryInput!): [KLoukdoSubCategoryType!]!
   getKLoukdoAdvertisementImage: [KLoukdoAdvertisementImageType!]!
@@ -489,7 +508,7 @@ type Query {
   getKLoukdoPromotionRandom: [KLoukdoPromotionType!]!
   getAllKLoukdoPromotions(page: Float!): [KLoukdoPromotionType!]!
   getKLoukdoProduct(params: DeleteKLoukdoProductInput!): KLoukdoProductType!
-  getAllKLoukdoProducts(params: GetAllKLoukdoProductInput!): [KLoukdoProductType!]!
+  getAllKLoukdoProducts(params: GetAllKLoukdoProductInput!): GetKLoukdoProductByPageType!
   searchKLoukdoProductByName(name: String!): [KLoukdoProductType!]!
   findKLoukdoProductByCategory(params: GetKLoukdoProductByCategoryInput!): [KLoukdoProductType!]!
   findKLoukdoProductBySubCategory(params: GetKLoukdoProductBySubCategoryInput!): [KLoukdoProductType!]!
@@ -801,7 +820,7 @@ type Mutation {
   deleteKLoukdoCategory(params: DeleteKLoukdoCategoryInput!): KLoukdoCategoryType!
   createKLoukdoSubCategory(params: CreateKLoukdoSubCategoryInput!): KLoukdoSubCategoryType!
   updateKLoukdoSubCategory(params: UpdateKLoukdoSubCategoryInput!): KLoukdoSubCategoryType!
-  deleteKLoukdoSubCategory(params: DeleteKLoukdoSubCategoryInput!): KLoukdoCategoryType!
+  deleteKLoukdoSubCategory(params: DeleteKLoukdoSubCategoryInput!): KLoukdoSubCategoryType!
   createKLoukdoAdvertisementImage(params: CreateKLoukdoAdvertisementImageInput!): KLoukdoAdvertisementImageType!
   updateKLoukdoAdvertisementImage(params: UpdateKLoukdoAdvertisementImageInput!): KLoukdoAdvertisementImageType!
   deleteKLoukdoAdvertisementImage(params: DeleteKLoukdoAdvertisementImageInput!): KLoukdoAdvertisementImageType!

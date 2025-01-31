@@ -44,6 +44,18 @@ export class KLoukdoService {
         return category;
     }
 
+    async getAllCategoryByPage({ page = 0, limit = 12}) {
+        const category = await KLoukdoCategory.find().skip(page * limit).limit(limit);
+        const cateCount = await KLoukdoCategory.count();
+        const pageCount = Math.ceil(cateCount / limit);
+        return {
+            category: category,
+            total: cateCount,
+            page: pageCount
+        };
+
+    }
+
     async updateCategory(params) {
         // console.log(params)
         const categoryId = params.id
@@ -81,7 +93,13 @@ export class KLoukdoService {
 
     async getAllSubCategoryByPage({ page = 0, limit = 12}) {
         const subCategory = await KLoukdoSubCategory.find().populate(['category']).skip(page * limit).limit(limit).sort('category');
-        return subCategory;
+        const subCateCount = await KLoukdoSubCategory.count();
+        const pageCount = Math.ceil(subCateCount / limit);
+        return {
+            subCategory: subCategory,
+            total: subCateCount,
+            page: pageCount
+        };
     }
     async getAllSubCategories() {
         const subCategory = await KLoukdoSubCategory.find().populate(['category']);
@@ -631,19 +649,20 @@ export class KLoukdoService {
             updatedProductObj['price'] = { ...price }
             // Check if the photo updated
             const existingPhotoUrls = existing['photos'].map(photo => photo['url']);
-            for (let photo of newUpdate['photos']) {
+            if (newUpdate['photos']){
+                for (let photo of newUpdate['photos']) {
 
-                // if (!existingPhotoUrls.includes(photo['url'])) {
-                //     // delete in kstorage
-                    
-                //     this.natsService.getClient(async (client) => {
-                //         console.log(client)
-                //         await new FileDeletedPublisher(client).publish({
-                //             id: existing["photos"]["id"],
-                //             type: 'product-photo'
-                //         })
-                //     })
-                // }
+                    if (!existingPhotoUrls.includes(photo['url'])) {
+                        // delete in kstorage
+                        this.natsService.getClient(async (client) => {
+                            console.log(client)
+                            await new FileDeletedPublisher(client).publish({
+                                id: existing["photos"]["id"],
+                                type: 'product-photo'
+                            })
+                        })
+                    }
+                }
             }
         }
         return updatedProductObj;
@@ -806,8 +825,13 @@ export class KLoukdoService {
                 { $limit: limit }
             ]
         );
-
-        return products
+        const count = await KLoukdoProduct.count();
+        const pageCount = Math.ceil(count / limit);
+        return {
+            product: products,
+            total: count,
+            page: pageCount
+        }
     }
 
     async searchKLoukdoProductByName(name: string) {
@@ -927,7 +951,7 @@ export class KLoukdoService {
                 {
                     $sort: { _id: -1 }
                 },
-                { $limit: 30 }
+                { $limit: 12 }
             ]
         );
         return products;

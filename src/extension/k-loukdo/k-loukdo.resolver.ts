@@ -55,6 +55,9 @@ import DeleteKLoukdoProductInput from './type-defs/product/delete-kloukdo-produc
 import GetAllKLoukdoProductInput from './type-defs/product/get-all-kloukdo-product.input';
 import GetKLoukdoProductByCategoryInput from './type-defs/product/get-kloukdo-product-by-category.input';
 import GetKLoukdoProductBySubCategoryInput from './type-defs/product/get-kloukdo-product-by-sub-category.input';
+import { GetKLoukdoSubCategoryByPageType } from './type-defs/sub-category/get-sub-category.type';
+import { GetKLoukdoCategoryByPageType } from './type-defs/category/get-category-by-page.type';
+import { GetKLoukdoProductByPageType } from './type-defs/product/get-kloukdo-product-by-page.type';
 
 @Resolver()
 export class KLoukdoResolver {
@@ -76,6 +79,12 @@ export class KLoukdoResolver {
     @Query(() => [KLoukdoCategoryType])
     async getKLoukdoCategories() {
         return await this.service.getAllCategory();
+    }
+
+    @Directive('@auth')
+    @Query(() => GetKLoukdoCategoryByPageType)
+    async getKLoukdoCategoriesByPage(@Args('page', { type: () => Number }) page: number, @Context() ctx: any) {
+        return await this.service.getAllCategoryByPage({ page });
     }
 
     @Directive('@auth')
@@ -104,7 +113,7 @@ export class KLoukdoResolver {
     }
 
     @Directive('@auth')
-    @Query(() => [KLoukdoSubCategoryType])
+    @Query(() => GetKLoukdoSubCategoryByPageType)
     async getKLoukdoSubCategoriesByPage(@Args('page', { type: () => Number }) page: number, @Context() ctx: any) {
         return await this.service.getAllSubCategoryByPage({ page });
     }
@@ -130,7 +139,7 @@ export class KLoukdoResolver {
     }
 
     @Directive('@auth')
-    @Mutation(() => KLoukdoCategoryType)
+    @Mutation(() => KLoukdoSubCategoryType)
     @UsePipes(new JoiValidationPipe(DeleteKLoukdoSubCategorySchema))
     async deleteKLoukdoSubCategory(@Args('params') params: DeleteKLoukdoSubCategoryInput, @Context() ctx: any) {
         return await this.service.deleteSubCategory(params);
@@ -297,7 +306,7 @@ export class KLoukdoResolver {
 
     @Directive('@auth')
     @Directive('@currentUser')
-    @Query(() => [KLoukdoProductType])
+    @Query(() => GetKLoukdoProductByPageType)
     async getAllKLoukdoProducts(@Args('params') params: GetAllKLoukdoProductInput) {
         const { page, limit } = params;
         return await this.service.getAllKLoukdoProduct({ page, limit });
