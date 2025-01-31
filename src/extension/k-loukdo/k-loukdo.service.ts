@@ -357,6 +357,8 @@ export class KLoukdoService {
                 },
               },
               endDate: "$endDate",
+              createdAt: "$createdAt",
+              updatedAt: "$updatedAt",
             },
           }
         ]);
@@ -500,7 +502,9 @@ export class KLoukdoService {
                             name: "$product.subCategory.name"
                         },
                         price: { $arrayElemAt: ["$prices", 0] },
-                        photos: "$product.photos"
+                        photos: "$product.photos",
+                        createdAt: "$product.createdAt",
+                        updatedAt: "$product.updatedAt"
                     },
                     endDate: 1,
                 }
@@ -806,20 +810,373 @@ export class KLoukdoService {
         return products
     }
 
-    async searchKLoukdoProductByName(name: string): Promise<[KLoukdoProductDoc]> {
-        // const product = await Product.find({"name": {$regex: '.*' + name + '.*' } } ).populate(['productType', 'channel']);
-        const product = await KLoukdoProduct.find({ "name": { $regex: name, '$options': 'i' } }).limit(30).populate(['category', 'subCategory', 'user']);
-        return product as [KLoukdoProductDoc];
+    async searchKLoukdoProductByName(name: string) {
+        const products = await KLoukdoProduct.aggregate(
+            [   
+                {
+                    $match: {
+                        "name": { $regex: name, '$options': 'i' } 
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "kloukdocategories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "kloukdosubcategories",
+                        localField: "subCategory",
+                        foreignField: "_id",
+                        as: "subCategory"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        let: { user_id: '$user' },
+                        as: "user",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$_id", "$$user_id"],
+                                    }
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    id: "$_id",
+                                    email: 1,
+                                    username: 1,
+                                    firstName: 1,
+                                    lastName: 1,
+                                    activated: 1,
+                                    role: 1,
+                                    bio: 1,
+                                    phone: 1,
+                                    photo: 1,
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "prices",
+                        let: { product_id: '$_id' },
+                        as: "prices",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ["$product", "$$product_id"] },
+                                            { $eq: ["$isMain", true] },
+                                        ]
+                                    }
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    id: "$_id",
+                                    name: 1,
+                                    price: 1,
+                                    currency: 1,
+                                    discountPrice: 1,
+                                    hasDiscount: 1,
+                                    product: 1,
+                                    isMain: 1,
+                                }
+                            }
+                        ]
+                    },
+                },
+                { "$unwind": "$category" },
+                { "$unwind": "$subCategory" },
+                { "$unwind": "$user" },
+                {
+                    $project: {
+                        _id: "$_id",
+                        id: "$_id",
+                        name: 1,
+                        price: { $arrayElemAt: ["$prices", 0] },
+                        showOnMenuBoard: 1,
+                        category: {
+                            _id: "$category._id",
+                            id: "$category._id",
+                            name: 1,
+                            icon: 1,
+                        },
+                        subCategory: {
+                            _id: "$subCategory._id",
+                            id: "$subCategory._id",
+                            name: 1,
+                            icon: 1,
+                        },
+                        user: 1,
+                        photos: 1,
+                        createdAt: 1
+                    }
+                },
+                {
+                    $sort: { _id: -1 }
+                },
+                { $limit: 30 }
+            ]
+        );
+        return products;
     }
 
     async findKLoukdoProductByCategory(id: string, limit = 15) {
-        const product = await KLoukdoProduct.find({ "category": id }).limit(limit).populate(['category', 'subCategory', 'user']);
-        return product as [KLoukdoProductDoc];
+        const products = await KLoukdoProduct.aggregate(
+            [   
+                {
+                    $lookup: {
+                        from: "kloukdocategories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "kloukdosubcategories",
+                        localField: "subCategory",
+                        foreignField: "_id",
+                        as: "subCategory"
+                    }
+                },
+                { "$unwind": "$category" },
+                { "$unwind": "$subCategory" },
+                {
+                    $match: {
+                        "category._id": mongoose.Types.ObjectId(id),
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        let: { user_id: '$user' },
+                        as: "user",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$_id", "$$user_id"],
+                                    }
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    id: "$_id",
+                                    email: 1,
+                                    username: 1,
+                                    firstName: 1,
+                                    lastName: 1,
+                                    activated: 1,
+                                    role: 1,
+                                    bio: 1,
+                                    phone: 1,
+                                    photo: 1,
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "prices",
+                        let: { product_id: '$_id' },
+                        as: "prices",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ["$product", "$$product_id"] },
+                                            { $eq: ["$isMain", true] },
+                                        ]
+                                    }
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    id: "$_id",
+                                    name: 1,
+                                    price: 1,
+                                    currency: 1,
+                                    discountPrice: 1,
+                                    hasDiscount: 1,
+                                    product: 1,
+                                    isMain: 1,
+                                }
+                            }
+                        ]
+                    },
+                },
+                { "$unwind": "$user" },
+                {
+                    $project: {
+                        _id: "$_id",
+                        id: "$_id",
+                        name: 1,
+                        price: { $arrayElemAt: ["$prices", 0] },
+                        showOnMenuBoard: 1,
+                        category: {
+                            _id: "$category._id",
+                            id: "$category._id",
+                            name: 1,
+                            icon: 1,
+                        },
+                        subCategory: {
+                            _id: "$subCategory._id",
+                            id: "$subCategory._id",
+                            name: 1,
+                            icon: 1,
+                        },
+                        user: 1,
+                        photos: 1,
+                        createdAt: 1
+                    }
+                },
+                {
+                    $sort: { _id: -1 }
+                },
+                { $limit: limit }
+            ]
+        );
+        return products;    
     }
 
     async findKLoukdoProductBySubCategory(id: string, limit = 15) {
-        const product = await KLoukdoProduct.find({ "subCategory": id }).limit(limit).populate(['category', 'subCategory', 'user']);
-        return product as [KLoukdoProductDoc];
+        const products = await KLoukdoProduct.aggregate(
+            [   
+                {
+                    $lookup: {
+                        from: "kloukdocategories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "kloukdosubcategories",
+                        localField: "subCategory",
+                        foreignField: "_id",
+                        as: "subCategory"
+                    }
+                },
+                { "$unwind": "$category" },
+                { "$unwind": "$subCategory" },
+                {
+                    $match: {
+                        "subCategory._id": mongoose.Types.ObjectId(id),
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        let: { user_id: '$user' },
+                        as: "user",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$_id", "$$user_id"],
+                                    }
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    id: "$_id",
+                                    email: 1,
+                                    username: 1,
+                                    firstName: 1,
+                                    lastName: 1,
+                                    activated: 1,
+                                    role: 1,
+                                    bio: 1,
+                                    phone: 1,
+                                    photo: 1,
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "prices",
+                        let: { product_id: '$_id' },
+                        as: "prices",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ["$product", "$$product_id"] },
+                                            { $eq: ["$isMain", true] },
+                                        ]
+                                    }
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 1,
+                                    id: "$_id",
+                                    name: 1,
+                                    price: 1,
+                                    currency: 1,
+                                    discountPrice: 1,
+                                    hasDiscount: 1,
+                                    product: 1,
+                                    isMain: 1,
+                                }
+                            }
+                        ]
+                    },
+                },
+                { "$unwind": "$user" },
+                {
+                    $project: {
+                        _id: "$_id",
+                        id: "$_id",
+                        name: 1,
+                        price: { $arrayElemAt: ["$prices", 0] },
+                        showOnMenuBoard: 1,
+                        category: {
+                            _id: "$category._id",
+                            id: "$category._id",
+                            name: 1,
+                            icon: 1,
+                        },
+                        subCategory: {
+                            _id: "$subCategory._id",
+                            id: "$subCategory._id",
+                            name: 1,
+                            icon: 1,
+                        },
+                        user: 1,
+                        photos: 1,
+                        createdAt: 1
+                    }
+                },
+                {
+                    $sort: { _id: -1 }
+                },
+                { $limit: limit }
+            ]
+        );
+        return products;    
     }
     
 }
